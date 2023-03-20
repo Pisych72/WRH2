@@ -1,0 +1,177 @@
+<script>
+////////////////////////////////////////////Добавление строки Номенклатура/////////////////
+$('#nom-form').on('submit',function(e){
+output='';
+event.preventDefault();
+console.log('Кнопка добавить');
+let sid=$('#unit_id').val();
+let _csr=$("input[name=csrfmiddlewaretoken]").val();
+let _tlt=$('#idtitle').val();
+let _izm=$('#idizm').val();
+let _idc=$('#idcat').val();
+let _srk=$('#idsrok').val();
+
+mydata={
+unitid:sid,
+csrfmiddlewaretoken:_csr,
+title:_tlt,
+izm:_izm,
+category:_idc,
+srok:_srk
+}
+console.log(mydata);
+$.ajax({
+url:'/NomSave/',
+method:"POST",
+data:mydata,
+dataType:"json",
+
+success:function(data){
+x=data.unit_data;
+if (data.status == 'Save'){
+for(i=0;i<x.length;i++){
+output +='<tr><td style="width:420px;" class="align-middle fixed">'+ x[i].title +'</td>'+
+'<td style="width:180px;" class="align-middle fixed">'+ x[i].izm__title +'</td>'+
+'<td style="width:300px;" class="align-middle fixed">'+ x[i].category__title +'</td>'+
+'<td style="width:90px;" class="align-middle fixed text-center">'+ x[i].srok +'</td>'+
+'<td class="text-center align-middle fixed" style="width:45px;"><input data-sid='+x[i].id+' data-update='+x[i].id+' class="btn-nom-update " value="Update" type="image" src="../static/images/update.png" style="width:25px;" > </td>'+
+'<td class="text-center align-middle fixed" style="width:50px;"><input data-sid='+x[i].id+' data-del="#" class="btn-nom-delete " value="Update" type="image" src="../static/images/del.png" style="width:25px;" > </td></tr>'
+
+
+};
+$('#tbody').html(output)
+    output='';
+    $('#unit_id').val('');
+    $("form")[0].reset();
+};
+if (data.status == 0){alert('NO')};
+}
+});
+
+});
+////////////////////////////////////////Конец добавления строки Номенклатура/////////////////////////////
+
+////////////////////////////////////////Удаление строки/////////////////////////////////////////////////
+/////////////////////////////Delete SPR
+$('#tbody').on('click','.btn-nom-delete',function(e){
+event.preventDefault();
+console.log('Delete Click');
+let id=$(this).attr('data-sid');
+let csr=$("input[name=csrfmiddlewaretoken]").val();
+mydata={sid:id, csrfmiddlewaretoken:csr,};
+mythis=$(this);
+$.ajax({
+url:'/NomDelete/',
+
+method:'GET',
+data:mydata,
+dataType:"json",
+
+success:function(data){
+if(data.status =='Del'){$(mythis).closest("tr").fadeOut();}
+if (data.status == 0){
+    alert('Запись не удалена, потому что она используется в других документах...' );
+    }
+},
+});
+});
+
+///////////////////////////////////////Конец удаления строки/////////////////////////////////////////////
+///////////////////////////////////////Обновление строки Номенклатура////////////////////////////////////
+$('#tbody').on('click','.btn-nom-update',function(e){
+event.preventDefault();
+console.log('Clicked Update');
+
+let id=$(this).attr('data-sid');
+
+let csr=$("input[name=csrfmiddlewaretoken]").val();
+console.log(id);
+
+mydata={sid:id, csrfmiddlewaretoken:csr,};
+mythis=$(this);
+
+$.ajax({
+url:'/NomUpdate/',
+method:'POST',
+data:mydata,
+dataType:"json",
+
+success:function(data){
+$('#unit_id').val(data.id);
+$('#idtitle').val(data.title);
+$("#idcat").val(data.idcat).change();
+$("#idizm").val(data.idizm).change();
+$("#idsrok").val(data.srok);
+},
+});
+});
+///////////////////////////////////////Конец обновления строки Номенклатура//////////////////////////////
+///////////////////////////////////////Добавление единицы измерения в список//////////////////////////////
+$('#savebtn5').on('click',function(e){
+output='';
+event.preventDefault();
+console.log('Кнопка добавить единицу измерения');
+let title=$('#idtitle2').val();
+let csr=$("input[name=csrfmiddlewaretoken]").val();
+console.log(title);
+mydata={title:title, csrfmiddlewaretoken:csr,};
+
+$.ajax({
+url:'/NomAddUnit/',
+method:'POST',
+data:mydata,
+dataType:"json",
+
+success:function(data){
+if(data.status==1){
+y=data.unit_data;
+$('#idizm option').remove();
+    for(i=0;i<y.length;i++){
+    $('#idizm').append('<option value='+y[i].id+'>'+y[i].title);
+    }
+$('#idtitle2').val('');
+$('#idizm').prepend('<option value="" selected>---------</option>');
+if(data.status==0){
+alert('Нет!')
+}
+}
+}
+});
+});
+//////////////////////////////////////Конец добавления единицы измерения//////////////////////////////////
+///////////////////////////////////////Добавление категории в список//////////////////////////////
+$('#savebtn6').on('click',function(e){
+output='';
+event.preventDefault();
+console.log('Кнопка добавить категорию');
+let title=$('#idtitle3').val();
+let csr=$("input[name=csrfmiddlewaretoken]").val();
+console.log(title);
+mydata={title:title, csrfmiddlewaretoken:csr,};
+
+$.ajax({
+url:'/NomAddCat/',
+method:'POST',
+data:mydata,
+dataType:"json",
+
+success:function(data){
+if(data.status==1){
+y=data.unit_data;
+$('#idcat option').remove();
+    for(i=0;i<y.length;i++){
+    $('#idcat').append('<option value='+y[i].id+'>'+y[i].title);
+    }
+$('#idtitle3').val('');
+$('#idcat').prepend('<option value="" selected>---------</option>');
+if(data.status==0){
+alert('Нет!')
+}
+}
+}
+});
+});
+
+//////////////////////////////////////Конец добавления единицы измерения//////////////////////////////////
+
+</script>

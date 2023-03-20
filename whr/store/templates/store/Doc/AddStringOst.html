@@ -1,0 +1,86 @@
+{% extends 'store/menu.html' %}
+{% load static %}
+{% block DataArea %}
+
+<div class="row">
+
+
+<div class="col-md-12 mx-auto shadow">
+
+<table class=" table shadow ">
+<thead>
+<tr>
+<td style="width:60%"></td>
+<td style="width:13; " class="border text-end "> Номер документа </td>
+<td style="width:10%;" class="border text-end" >Дата документа</td>
+
+<td style="width:10%;" class="border text-end"></td>
+</tr>
+</thead>
+    <form method="post" id="ost-form">
+ {% csrf_token %}
+
+
+    <tr><td><input  type="hidden" id="id_iddoc" value="{{docost.id}} " ></th>
+        <td  class="border text-end" ><input type="text" id="id_nomerdoc" class="form-control" style="text-align:right" required value="{{docost.nomerdoc}}"></td>
+        <td  "class="text-end pb-3"> <input type="date" id="id_datadoc" class="form-control" style="text-align:right" required value="{{docost.datadoc|date:'Y-m-d'}}"></td>
+
+        <td class="border text-end"> <button type="submit" class="btn  btn-primary btn-sm mb-1 " id="savebtn">Сохранить</button></td>
+    </form>
+    </tr>
+</table >
+
+
+    <table class=" table shadow table-bordered table-hover" style="width:100%" >
+
+        <form id="ost-string-form" method="post">
+             {% csrf_token %}
+            <td style="width:40%"  >Наименование, ед.изм.</td>
+
+             <td  class="text-center" style="width:10%" >Цена</td>
+             <td  class="text-center "style="width:10%"  >Кол-во</td>
+             <td  class="text-center " style="width:10%">Сумма</td>
+             <td class="text-center  " style="width:10%" >НДС</td>
+            <td  class="text-center " style="width:10%" >Сумма с НДС</td>
+<tr>
+       <td > <select name="title" id="idtitle" class="form-control  " required >
+
+            <option selected></option>
+            {% for item in nom %}
+            <option value="{{item.id}}">{{item.title}}, {{item.izm}}</option>
+            {% endfor %}
+       </select></td>
+
+           <td> <input type="number" id="idprice" class="form-control text-end" step="any" required >
+        </td></td>
+
+         <td><input type="number" id="idkol" class="form-control text-end" step="any" required>
+        </td>
+
+       <td> <input type="number" id="idsumma" class="form-control text-end" step="any" required readonly>
+        </td>
+
+        <td><input type="number" id="idnds" class="form-control text-end" value="20" required>
+        </td>
+
+           <td> <input type="number" id="idtotal" class="form-control text-end" step="any" required readonly>
+        </th>
+
+        <td class="text-end"><button class="btn btn-primary btn-sm" type="submit">Записать</td>
+</tr>
+        </form>
+
+
+
+    <tbody id="string-ost">
+
+    </tbody>
+</table>
+
+
+
+</div>
+</div>
+
+{% endblock DataArea %}
+

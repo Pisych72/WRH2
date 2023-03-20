@@ -1,0 +1,113 @@
+{% extends 'store/menu.html' %}
+{% load static %}
+{% block DataArea %}
+<h4 class=" mb-4 mt-1"> <img src="{% static '/images/report.png' %}" class="miniature"> Справочники</h4>
+<div class="row ">
+
+<div class="col-md-3">
+    <div class="card shadow" style="width: 18rem;">
+    <div class="card-body">
+    <h5 class="card-title">Единицы измерения</h5>
+     <img class="card-img-top miniature" src="{% static '/images/report.png' %}" >
+    <p class="card-text">Создание,редактирование, удаление единиц изменения</p>
+    <a href="{% url 'UnitList' %}" class="btn btn-primary">Открыть справочник</a>
+    </div>
+    </div>
+</div>
+
+<div class="col-md-3">
+    <div class="card shadow mb-4" style="width: 18rem;">
+    <div class="card-body">
+    <h5 class="card-title">Категории</h5>
+     <img class="card-img-top miniature" src="{% static '/images/report.png' %}" >
+    <p class="card-text">Создание,редактирование, удаление категорий ТМЦ</p>
+    <a href="{% url 'CategoryList' %}" class="btn btn-primary">Открыть справочник</a>
+    </div>
+    </div>
+</div>
+
+<div class="col-md-3">
+    <div class="card shadow" style="width: 18rem;">
+    <div class="card-body">
+    <h5 class="card-title">Поставщики</h5>
+     <img class="card-img-top miniature" src="{% static '/images/report.png' %}" >
+    <p class="card-text">Создание,редактирование, удаление поставщиков</p>
+    <a href="{% url 'PostavList' %}" class="btn btn-primary">Открыть справочник</a>
+    </div>
+    </div>
+</div>
+
+
+
+<div class="col-md-3">
+    <div class="card shadow" style="width: 18rem;">
+    <div class="card-body">
+    <h5 class="card-title">Номенклатура</h5>
+     <img class="card-img-top miniature" src="{% static '/images/report.png' %}" >
+    <p class="card-text">Создание,редактирование, удаление  номенклатуры</p>
+    <a href="{% url 'SprNom' %}" class="btn btn-primary">Открыть справочник</a>
+    </div>
+    </div>
+</div>
+
+
+ <div class="col-md-3 ">
+    <div class="card shadow mr-3" style="width: 18rem;">
+    <div class="card-body">
+    <h5 class="card-title">Подразделения</h5>
+     <img class="card-img-top miniature" src="{% static '/images/report.png' %}" >
+    <p class="card-text">Создание,редактирование, удаление  подразделений</p>
+    <a href="{% url 'PodrazList' %}" class="btn btn-primary">Открыть справочник</a>
+    </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="col-md-3">
+    <div class="card shadow" style="width: 18rem;">
+    <div class="card-body">
+    <h5 class="card-title">Подотчетные лица</h5>
+     <img class="card-img-top miniature" src="{% static '/images/report.png' %}" >
+    <p class="card-text">Создание,редактирование, удаление подотчетных лиц</p>
+    <a href="{% url 'FioList' %}" class="btn btn-primary">Открыть справочник</a>
+    </div>
+    </div>
+</div>
+
+<div class="col-md-3">
+    <div class="card shadow" style="width: 18rem;">
+    <div class="card-body">
+    <h5 class="card-title">Объекты</h5>
+     <img class="card-img-top miniature" src="{% static '/images/report.png' %}" >
+    <p class="card-text">Создание,редактирование, удаление объектов </p>
+    <a href="{% url 'ObctList' %}" class="btn btn-primary">Открыть справочник</a>
+    </div>
+    </div>
+
+
+</div>
+
+<div class="col-md-3">
+    <div class="card shadow" style="width: 18rem;">
+    <div class="card-body">
+    <h5 class="card-title">Списание</h5>
+     <img class="card-img-top miniature" src="{% static '/images/report.png' %}" >
+    <p class="card-text">Создание,редактирование, удаление причин списания </p>
+    <a href="{% url 'SpisList' %}" class="btn btn-primary">Открыть справочник</a>
+    </div>
+    </div>
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+{% endblock DataArea %}
