@@ -7,41 +7,45 @@
 
 <div class="col-md-12 mx-auto shadow">
 
-<table class=" table shadow ">
-<thead>
+<table class=" table shadow table-hover ">
+<thead class="bg-primary text-light">
 <tr>
-<td style="width:60%"></td>
-<td style="width:13; " class="border text-end "> Номер документа </td>
-<td style="width:10%;" class="border text-end" >Дата документа</td>
+<th  style="width:60%" >Документ начальных остатков</th>
+<th style="width:13; " class=" text-end "> Номер документа </th>
+<th style="width:10%;" class=" text-end" >Дата документа</th>
 
-<td style="width:10%;" class="border text-end"></td>
+<th style="width:10%;" class=" text-end"></th>
 </tr>
 </thead>
-    <form method="post" id="ost-form">
+    <form method="post" id="ost-form2" >
  {% csrf_token %}
 
+<tr>
+    <td><input  type="hidden" id="id_iddoc" value="{{docost.id}} " ></td>
+        <td  class=" text-end" ><input type="text" id="id_nomerdoc" class="form-control" style="text-align:right" required value="{{docost.nomerdoc}}"></td>
+        <td "class="text-end pb-3"> <input type="date" id="id_datadoc" class="form-control" style="text-align:right" required value="{{docost.datadoc|date:'Y-m-d'}}"></td>
 
-    <tr><td><input  type="hidden" id="id_iddoc" value="{{docost.id}} " ></th>
-        <td  class="border text-end" ><input type="text" id="id_nomerdoc" class="form-control" style="text-align:right" required value="{{docost.nomerdoc}}"></td>
-        <td  "class="text-end pb-3"> <input type="date" id="id_datadoc" class="form-control" style="text-align:right" required value="{{docost.datadoc|date:'Y-m-d'}}"></td>
-
-        <td class="border text-end"> <button type="submit" class="btn  btn-primary btn-sm mb-1 " id="savebtn">Сохранить</button></td>
+        <td class=" text-end"> <button type="submit" class="btn  btn-dark btn-sm mb-1 " id="returnJurOst">Сохранить</button></td>
     </form>
     </tr>
 </table >
 
 
-    <table class=" table shadow table-bordered table-hover" style="width:100%" >
+    <table class=" table  shadow table-bordered table-hover" style="width:100%" >
 
         <form id="ost-string-form" method="post">
              {% csrf_token %}
-            <td style="width:40%"  >Наименование, ед.изм.</td>
+            <input  type="hidden" id="id_string" value="" >
+            <thead class="bg-primary">
+            <th style="width:40%" class="text-light" >Наименование, ед.изм.</th>
 
-             <td  class="text-center" style="width:10%" >Цена</td>
-             <td  class="text-center "style="width:10%"  >Кол-во</td>
-             <td  class="text-center " style="width:10%">Сумма</td>
-             <td class="text-center  " style="width:10%" >НДС</td>
-            <td  class="text-center " style="width:10%" >Сумма с НДС</td>
+             <th  class="text-end text-light " style="width:10%" >Цена</th>
+             <th  class="text-end text-light" style="width:10%"  >Кол-во</th>
+             <th  class="text-end text-light" style="width:10%">Сумма</th>
+             <th class="text-end  text-light" style="width:10%" >НДС</th>
+            <th class="text-end text-light" style="width:10%" >Сумма с НДС</td>
+            <th></th>
+            </thead>
 <tr>
        <td > <select name="title" id="idtitle" class="form-control  " required >
 
@@ -58,8 +62,7 @@
         </td>
 
        <td> <input type="number" id="idsumma" class="form-control text-end" step="any" required readonly>
-       </td>
-
+        </td>
 
         <td><input type="number" id="idnds" class="form-control text-end" value="20" required>
         </td>
@@ -67,15 +70,29 @@
            <td> <input type="number" id="idtotal" class="form-control text-end" step="any" required readonly>
         </th>
 
-        <td class="text-end"><button class="btn btn-primary btn-sm" type="submit">Записать</td>
+        <td class="text-end"><button class="btn btn-secondary btn-sm" type="submit" id="save-string">Записать</td>
 </tr>
-         </form>
+        </form>
 
 
 
-    <tbody id="string-ost">
+    <tbody id="string-ost" >
+
+{% for item in items %}
+    <tr><td>{{item.title}},{{item.title.izm}}</td>
+    <td class="text-end">{{item.price}}</td>
+    <td class="text-end">{{item.kol}}</td>
+    <td class="text-end">{{item.summa}}</td>
+
+    <td class="text-end " >{{item.nds}}</td>
+    <td class="text-end">{{item.summawithnds}}</td>
+      <td  class="text-end" colspan=2 ><input data-sid={{item.pk}} data-update={{item.pk}} class="btn-string-update " value="Update" type="image" src="../static/images/edit2.png" style="width:25px;" >
+<input data-sid={{item.pk}} data-del="#" class="btn-string-delete " value="Update" type="image" src="../static/images/del.png" style="width:25px;" > </td></tr>
+    </tr>
+    {% endfor %}
 
     </tbody>
+        <tfoot id="idfoot"><td class="fw-bold">Итого:</td><td colspan="3" class="text-end fw-bold ">{{s}}</td><td colspan="2>" class="text-end fw-bold">{{s2}}</td> </tfoot>
 </table>
 
 

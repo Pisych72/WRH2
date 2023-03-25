@@ -77,5 +77,15 @@ urlpatterns=[
    path('StringOstSave/', StringOstSave, name='StringOstSave'),
    path('JurnalOst/', JurnalOst, name='JurnalOst'),
    path('AddStringOst/<str:pk>',AddStringOst,name='AddStringOst'),
-   #path('JurnalOstUpdate/<int:last_id>',JurnalOstUpdate,'JurnalOstUpdate')
+   path('ReturnToJurnalOst/',ReturnToJurnalOst,name='ReturnToJurnalOst'),
+   path('EditOstDoc/',EditOstDoc,name='EditOstDoc'),
+   path('DeleteOstStringTable/',DeleteOstStringTable,name='DeleteOstStringTable'),
+   path('UpdateOstStringTable/',UpdateOstStringTable,name='UpdateOstStringTable'),
+   path('DeleteOstDoc/',DeleteOstDoc,name='DeleteOstDoc'),
+
+   # Поступление ТМЦ//////////////////////////////////////////////////////
+   path('JurnalPost/',JurnalPost,name='JurnalPost'), #Журнал документов поступление
+   path('AddStringPost/<str:pk>',AddStringPost,name='AddStringPost'), #Добавление строк в новый документ
+   path('ReturnToJurnalPost/', ReturnToJurnalPost, name='ReturnToJurnalPost'),#сохранение и возврат в журнад
+   path('EditPostDoc/',EditPostDoc,name='EditPostDoc'),
 ]

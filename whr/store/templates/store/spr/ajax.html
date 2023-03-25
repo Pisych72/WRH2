@@ -1,6 +1,6 @@
 <script>
  output='';
-$('#post-form').on('submit',function(e){
+$('#postspr-form').on('submit',function(e){
 event.preventDefault();
 var self = this;
 let sid=$('#unit_id').val();
@@ -26,10 +26,10 @@ success:function(data){
     x=data.unit_data;
     if (data.status=='Save'){
     for(i=0;i<x.length;i++){
-    output +='<tr><td class="align-middle" style="width:960px;">'+ x[i].title+'</td>'+
-    '<td class="text-center align-middle">'+'<input data-sid='+x[i].id+' data-update="{{url_update}}" class="btn-update" value="Update" type="image" src="../static/images/update.png" style="width:25px;">'+'</td>'
-    +
-    '<td class="text-center align-middle">'+'<input data-sid='+x[i].id+' data-del="{{url_delete}}" class="btn-del" value="Delete" type="image" src="../static/images/del.png" style="width:28px;">'+'</td></tr>'
+    output +='<tr><td class="align-middle">'+ x[i].title+'</td>'+
+    '<td class="text-center align-middle">'+'<input data-sid='+x[i].id+' data-update="{{url_update}}" class="btn-update" value="Update" type="image" src="../static/images/update.png" style="width:30px;">'+
+
+    '<input data-sid='+x[i].id+' data-del="{{url_delete}}" class="btn-del" value="Delete" type="image" src="../static/images/del.png" style="width:30px;">'+'</td></tr>'
     }
 
     $('#tbody').html(output)
@@ -39,6 +39,7 @@ success:function(data){
     }
     if (data.status == 0){
     alert('Запись не добавлена. Возможно, такая уже есть в справочнике...');
+    $("#idtitle").val('');
     }
 }
 });

@@ -97,7 +97,6 @@ def ObctList(request):
     unit = Obct.objects.all()
     form = ObctForm()
     form2=PodrazForm2()
-
     return render(request, 'store/spr/SprObct.html', {'title': "Объекты",
                                                       'unit': unit, 'form': form, 'pic_label': 'Объекты',
                                                       'url_name': reverse('SaveObct'),
@@ -105,7 +104,6 @@ def ObctList(request):
                                                       'url_name2': reverse('SavePodraz2'),
                                                       'form2': form2,'url_update': reverse('ObctUpdate'),
                                                       })
-
 
 # '****************************************AJAX************************************'
 # сохранение на ajax (Единица измерения):
@@ -120,7 +118,6 @@ def SprSave(request):
                 newrecord = Unit(title=title)
             else:
                 newrecord = Unit(title=title,id=uid)
-
             newrecord.save()
             print(newrecord.id,title)
             un=Unit.objects.values()
@@ -207,7 +204,6 @@ def SavePodraz2(request):
     if request.method == 'POST':
         form2 = PodrazForm2(request.POST)
         if form2.is_valid():
-            print('YES')
             title = request.POST['title']
             newrecord = Podraz(title=title)
             newrecord.save()
@@ -215,10 +211,8 @@ def SavePodraz2(request):
             unit_data = list(un)
             pd=Podraz.objects.values()
             podraz_data=list(pd)
-            print(podraz_data)
             return JsonResponse({'status': 'Save', 'unit_data': unit_data,'podraz_data':podraz_data})
         else:
-            print('NO')
             return JsonResponse({'status': 0})
 
 #'сохранение Подотчетники'
@@ -242,28 +236,20 @@ def SaveFio(request):
 def SaveObct(request):
     if request.method=='POST':
         form = ObctForm(request.POST)
-        print("Мы тут!")
         if form.is_valid():
             print("Форма валидна")
             uid = request.POST['unitid']
             title = request.POST['title']
             podraz=request.POST['podraz']
-
             if uid =='':
-
                 newrecord=Obct(title=title,podraz_id=podraz)
             else:
-
                 newrecord = Obct(title=title, podraz_id=podraz,id=uid)
             newrecord.save()
             un=Obct.objects.values('id','title','podraz__title')
-
-
             unit_data=list(un)
-            print(unit_data)
             return JsonResponse({'status':'Save','unit_data':unit_data})
         else:
-            print("Форма не валидна")
             return JsonResponse({'status':0})
 
 #***********************//AJAX//**********************************************
@@ -425,7 +411,6 @@ def FioUpdate(request):
     else:
         return JsonResponse({'status':0,})
 
-
 # Номенклатура
 #Создание номенклатуры
 def SprNom(request):
@@ -437,7 +422,6 @@ def SprNom(request):
     'pic_label': 'Номенкл.','form2':form2,'form3':form3 })
 
 # редактирование номенклатуры
-
 def NomSave(request):
     if request.method =='POST':
         form=NomForm(request.POST)
@@ -491,9 +475,7 @@ def NomUpdate(request):
     else:
         return JsonResponse({'status':0,})
 # Объекты
-
 # редактирование объекта
-
 def ObctUpdate(request):
     if request.method=='POST':
         id=request.POST.get('sid')
@@ -529,10 +511,6 @@ def NomAddCat(request):
         except:
             return JsonResponse({'status':0})
 
-
-
-
-
 # Логин
 def loginUser(request):
    if request.method == 'POST':
@@ -544,7 +522,6 @@ def loginUser(request):
    else:
       form = UserLoginForm()
    return render(request, 'store/loginUser.html', {"form": form})
-
 
 def UserOut(request):
    logout(request)
@@ -559,14 +536,12 @@ def NewOstDoc(request):
     form2=JurnalForm()
     return render(request,'store/Doc/DocOst.html',{'form':form,'form2':form2,'pic_label':'Начальные остатки'})
 
-
-
 def JurnalOst(request):
     podraz = Podraz.objects.get(pk=74)
     postav = Postav.objects.get(pk=9)
     obct = Obct.objects.get(pk=180)
     fio = Fio.objects.get(pk=5)
-    jurnalost=Jurnal.objects.filter(oper=1)
+    jurnalost=Jurnal.objects.filter(oper=1).order_by('-created_at')
     if request.method=='POST':
         nomerdoc1=request.POST['nomerdoc']
         datadoc1=request.POST['datadoc']
@@ -579,27 +554,31 @@ def JurnalOst(request):
         newost.obct=obct
         newost.fio=fio
         newost.oper=1
-
         newost.save()
-        un = Jurnal.objects.values()
+        un = Jurnal.objects.filter(oper=1).values()
         unit_data=list(un)
         print(newost.id)
         ur=reverse('AddStringOst',args=[newost.id])
         print(ur)
         return JsonResponse({'status':1,'unit_data':unit_data,'url': ur})
-
-
     else:
         form=OstDocForm(initial={'podraz':podraz,'postav':postav,'obct':obct,'fio':fio})
-
     return render(request,'store/Doc/JurnalOst.html',{'jurnalost':jurnalost,'pic_label':'Начальные остатки','form':form,'title':'Журнал начальных остатков'})
 
 def AddStringOst(request,pk):
     doc=Jurnal.objects.get(pk=pk)
+    item=JurnalDoc.objects.filter(iddoc=pk)
     nom=Nom.objects.all()
-    print(doc.datadoc)
+    sum = JurnalDoc.objects.filter(iddoc=pk).aggregate(Sum("summa"))
+    sumnds = JurnalDoc.objects.filter(iddoc=pk).aggregate(Sum("summawithnds"))
+    if item:
+        summa1 = round(sum['summa__sum'], 2)
+        summa2 = round(sumnds['summawithnds__sum'], 2)
+    else:
+        summa1=0.0
+        summa2=0.0
     t="Документ № " + doc.nomerdoc +" от "+doc.datadoc.strftime("%d.%m.%Y")
-    return render(request,'store/Doc/AddStringOst.html',{'docost':doc,'nom':nom,'title':t,'pic_label':'Начальные остатки'})
+    return render(request,'store/Doc/AddStringOst.html',{'docost':doc,'nom':nom,'title':t,'pic_label':'Начальные остатки','items':item,'s':summa1,'s2':summa2})
 
 def StringOstSave(request):
     podraz = Podraz.objects.get(pk=74)
@@ -608,6 +587,7 @@ def StringOstSave(request):
     fio = Fio.objects.get(pk=5)
     jurnalost = Jurnal.objects.filter(oper=1)
     if request.method=='POST':
+        idstring=request.POST['idstring']
         iddoc=Jurnal.objects.get(pk=request.POST['id'])
         title=Nom.objects.get(pk=request.POST['title'])
         kol=request.POST['kol']
@@ -615,8 +595,12 @@ def StringOstSave(request):
         summa=request.POST['summa']
         nds=request.POST['nds']
         total=request.POST['total']
-
-        newost=JurnalDoc()
+        if idstring=='':
+            print('equel 0')
+            newost=JurnalDoc()
+        else:
+            newost=JurnalDoc.objects.filter(pr=idstring)
+            print('no 0')
         newost.iddoc=iddoc
         newost.title=title
         newost.price=price
@@ -631,7 +615,7 @@ def StringOstSave(request):
         newost.oper=1
         newost.uniqfield=(str(newost.title.id)+'_'+str(newost.price))
         newost.save()
-        un=JurnalDoc.objects.filter(pk=newost.id).values('id','title__title','title__izm__title','price','kol',
+        un=JurnalDoc.objects.order_by('title_id').filter(pk=newost.id).values('id','title__title','title__izm__title','price','kol',
                                       'summa','nds','summawithnds','iddoc')
 
         sum = JurnalDoc.objects.filter(iddoc=iddoc).aggregate(Sum("summa"))
@@ -640,9 +624,154 @@ def StringOstSave(request):
         snds=(sumnds['summawithnds__sum'])
         roundsumma=round(s, 2)
         roundnds=round(snds,2)
-
-
         unit_data = list(un)
-
-        print(unit_data)
         return JsonResponse({'status': 1, 'unit_data': unit_data,'total':roundsumma,'total_nds':roundnds})
+
+def ReturnToJurnalOst(request):
+    if request.method=='POST':
+        items=JurnalDoc.objects.filter(iddoc=request.POST['id'])
+        if items:
+            sum = items.aggregate(Sum("summa"))
+            sumnds=items.aggregate(Sum("summawithnds"))
+        else:
+            sum=0.0
+            sumnds=0.0
+        doc=Jurnal.objects.get(pk=request.POST['id'])
+        doc.nomerdoc=request.POST['nomer']
+        doc.datadoc = request.POST['data']
+        if items:
+            doc.summa=round(sum['summa__sum'],2)
+            doc.summawithnds=round(sumnds['summawithnds__sum'],2)
+        else:
+            doc.summa = 0.0
+            doc.summawithnds = 0.0
+        doc.save()
+        url = reverse('JurnalOst')
+        return JsonResponse({'status':1,'url':url})
+def EditOstDoc(request):
+    if request.method=='POST':
+        id=request.POST['id']
+        ost=Jurnal.objects.get(pk=id)
+        items=JurnalDoc.objects.filter(iddoc=ost.id).values()
+        un = Jurnal.objects.values()
+        unit_data = list(items)
+        ur = reverse('AddStringOst', args=[ost.id])
+        return JsonResponse({'status': 1,'url': ur,'unit_data':unit_data})
+
+# удаление строки из таблицы документв Начальные остатки
+def DeleteOstStringTable(request):
+    if request.method=='POST':
+        string=JurnalDoc.objects.get(pk=request.POST['id'])
+        string.delete()
+        return JsonResponse({'status':1})
+# обновление строки таблицы документа Начальные остатки
+def UpdateOstStringTable(request):
+    item=JurnalDoc.objects.filter(pk=request.POST['id']).values()
+    unit_data=list(item)
+    print(unit_data)
+    price = (unit_data[0]['price'])
+    id = (unit_data[0]['id'])
+    iddoc_id = (unit_data[0]['iddoc_id'])
+    kol = (unit_data[0]['kol'])
+    title_id=(unit_data[0]['title_id'])
+    summa = (unit_data[0]['summa'])
+    summawithnds = (unit_data[0]['summawithnds'])
+    nds=(unit_data[0]['nds'])
+    d=JurnalDoc.objects.filter(pk=request.POST['id'])
+    d.delete()
+    return JsonResponse({'price':price,'id':id,'iddoc_id':iddoc_id,'kol':kol,'title_id':title_id,
+                         'summa':summa,'summawithnds':summawithnds,'nds':nds})
+
+# Удаление документов остатков
+def DeleteOstDoc(request):
+    if request.method=='GET':
+        print(request.GET['id'])
+        item=Jurnal.objects.filter(pk=request.GET['id'])
+        try:
+            item.delete()
+            return JsonResponse({'status': 1, })
+        except ProtectedError:
+            return JsonResponse({'status': 0, })
+
+#////////////////////////////ПОСТУПЛЕНИЕ НА СКЛАД////////////////////////////////////////////////
+#////////////////////////////Журнал документов поступления (oper=2)//////////////////////////////
+#////////////////////////////Шаблон - JurnalPost.html ///////////////////////////////////////////
+def JurnalPost(request):
+    postav=Postav.objects.all()
+    jurnalpost=Jurnal.objects.filter(oper=2).order_by('-created_at')
+    obct = Obct.objects.get(pk=180)
+    fio = Fio.objects.get(pk=5)
+    podraz = Podraz.objects.get(pk=74)
+    if request.method=='POST':
+        postdoc=Jurnal()
+        postdoc.oper=2
+        postdoc.nomerdoc=request.POST['nomerdoc']
+        postdoc.datadoc=request.POST['datadoc']
+        postav_item=Postav.objects.get(pk=request.POST['postav'])
+        postdoc.postav=postav_item
+        postdoc.fio=fio
+        postdoc.obct=obct
+        postdoc.podraz=podraz
+        postdoc.save()
+        un = Jurnal.objects.filter(oper=2).values()
+        unit_data = list(un)
+        print(postdoc.id)
+        ur = reverse('AddStringPost', args=[postdoc.id])
+        print(ur)
+        return JsonResponse({'status': 1, 'unit_data': unit_data, 'url': ur})
+    return render(request,'store/Doc/JurnalPost.html',{'postav':postav,'jurnalpost':jurnalpost,'pic_label':'Поступление','title':'Журнал приходных документов'})
+
+# Добавление строк в новый документ поступление
+def AddStringPost(request,pk):
+    doc = Jurnal.objects.get(pk=pk)
+    postav=Postav.objects.get(pk=doc.postav_id)
+    item = JurnalDoc.objects.filter(iddoc=pk)
+    print(postav)
+    postav_list=Postav.objects.all()
+    nom = Nom.objects.all()
+    sum = JurnalDoc.objects.filter(iddoc=pk).aggregate(Sum("summa"))
+    sumnds = JurnalDoc.objects.filter(iddoc=pk).aggregate(Sum("summawithnds"))
+    if item:
+        summa1 = round(sum['summa__sum'], 2)
+        summa2 = round(sumnds['summawithnds__sum'], 2)
+    else:
+        summa1 = 0.0
+        summa2 = 0.0
+    t = "Документ № " + doc.nomerdoc + " от " + doc.datadoc.strftime("%d.%m.%Y")
+    return render(request, 'store/Doc/AddStringPost.html',
+                  {'docost': doc, 'nom': nom, 'title': t, 'pic_label': 'Начальные остатки', 'items': item, 's': summa1,
+                   's2': summa2,'postav':postav,'postav_list':postav_list})
+
+
+def ReturnToJurnalPost(request):
+    if request.method == 'POST':
+        items = JurnalDoc.objects.filter(iddoc=request.POST['id'])
+        if items:
+            sum = items.aggregate(Sum("summa"))
+            sumnds = items.aggregate(Sum("summawithnds"))
+        else:
+            sum = 0.0
+            sumnds = 0.0
+        doc = Jurnal.objects.get(pk=request.POST['id'])
+        postav=Postav.objects.get(pk=request.POST['postav'])
+        doc.nomerdoc = request.POST['nomer']
+        doc.datadoc = request.POST['data']
+        doc.postav=postav
+        if items:
+            doc.summa = round(sum['summa__sum'], 2)
+            doc.summawithnds = round(sumnds['summawithnds__sum'], 2)
+        else:
+            doc.summa = 0.0
+            doc.summawithnds = 0.0
+        doc.save()
+        url = reverse('JurnalPost')
+        return JsonResponse({'status': 1, 'url': url})
+def EditPostDoc(request):
+    if request.method=='POST':
+        id=request.POST['id']
+        ost=Jurnal.objects.get(pk=id)
+        items=JurnalDoc.objects.filter(iddoc=ost.id).values()
+        un = Jurnal.objects.values()
+        unit_data = list(items)
+        ur = reverse('AddStringPost', args=[ost.id])
+        return JsonResponse({'status': 1,'url': ur,'unit_data':unit_data})
