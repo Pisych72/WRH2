@@ -12,6 +12,7 @@ class UnitForm(forms.ModelForm):
       fields = ['title']
       widgets = {
       'title': forms.TextInput(attrs={'class':'form-control','id':'idtitle'}),
+
       }
 
 class UnitFormSprav(forms.ModelForm):
@@ -75,8 +76,8 @@ class ObctForm(forms.ModelForm):
       model = Obct
       fields = ['title','podraz']
       widgets = {
-    'title': forms.TextInput(attrs={'class': 'form-control', 'style':'width:443px;','id':'idtitle'}),
-    'podraz': forms.Select(attrs={'class': 'form-control', 'style': 'width:440px;', 'id': 'idpodraz'}),
+    'title': forms.TextInput(attrs={'class': 'form-control', 'id':'idtitle'}),
+    'podraz': forms.Select(attrs={'class': 'form-control', 'id': 'idpodraz'}),
          }
 
 class NomForm(forms.ModelForm):

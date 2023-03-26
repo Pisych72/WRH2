@@ -6,21 +6,21 @@
     <div class="col-md-1  ">{{pic_label}}</div>
 <div class="col-md-11 mx-auto shadow">
  <table class="table shadow table-bordered table-hover" >
-  <thead class="bg-primary">
-  <th style="width:90%"></th>
+  <thead class="bg-primary text-light">
+  <th style="width:90%">Наименование</th>
     <th style="width:10%"></th>
   </thead>
   <tr><td>
  <form action={{url_name}} method="post" id="postspr-form">{% csrf_token %}
- <input type="hidden" name="unit_id " id="unit_id">{{ form.as_p}} </td>
+ <input type="hidden" name="unit_id " id="unit_id">{{ form.title}} </td>
 <td>
- <button type="submit" class="btn btn-primary mt-4" id="savebtn" >Сохранить</button></td>
+ <button type="submit" class="btn btn-primary " id="savebtn" >Сохранить</button></td>
 
 </tr>
  </form>
 </table>
 <div class="scrolltable">
-<table class="table shadow ">
+<table class="table shadow table-hover ">
   <thead >
   <th style="width:90%"></th>
     <th style="width:10%"></th>

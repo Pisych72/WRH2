@@ -6,14 +6,14 @@
     <div class="col-md-1  ">{{pic_label}}</div>
 <div class="col-md-11 mx-auto shadow">
 <table class="table table-bordered shadow ">
- <thead>
+ <thead class="bg-primary text-light">
 
     <tr class="mt-0">
-        <th style="width:40%;" class="border" >Наименование </th>
-        <th style="width:16.3%;" class="border border-end-0" >Ед.изм.</th>
-         <th style="width:25%;" class="border border-end-0" >Категория</th>
-         <th style="width:6.3%;" class="text-center" >Срок</th>
-        <th  style="width:11.3%" class="border"></th>
+        <th style="width:40%;" >Наименование </th>
+        <th style="width:16.3%;"  >Ед.изм.</th>
+         <th style="width:25%;"  >Категория</th>
+         <th style="width:6.3%;"  >Срок</th>
+        <th  style="width:11.3%" ></th>
     </tr>
   </thead>
 <form  method="post" id="nom-form">
@@ -21,8 +21,8 @@
     <input type="hidden" name="unit_id " id="unit_id">
 <tbody>
  <tr>
-     <td class="pt-2 "> {{ form.title}}</td>
-     <td class="pt-2 border border-end-0"  >
+     <td> {{ form.title}}</td>
+     <td>
          <div class="input-group">
                     {{form.izm}}
                     <div class=" input-group-button pr-2">
@@ -31,13 +31,13 @@
                 </div>
         </td>
 
-     <td class="pt-2 border border-end-0"  >
+     <td   >
      <div class="input-group">
-                   {{form.category}}
-                    <div class=" input-group-button pr-2">
-                        <button type="button" id="show-contact-modal-button2" class="btn btn-primary mr-2" style="margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#exampleModal6">...</button>
-                    </div>
-                </div>
+     {{form.category}}
+     <div class=" input-group-button pr-2">
+     <button type="button" id="show-contact-modal-button2" class="btn btn-primary mr-2" style="margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#exampleModal6">...</button>
+     </div>
+     </div>
 
      </td>
 
@@ -47,9 +47,9 @@
 </form></tbody>
 </table>
 
-
-<table class="table table-bordered shadow hovered ">
-<thead>
+<div class="scrolltable">
+<table class="table table-bordered shadow table-hover ">
+<thead >
 
     <tr class="mt-0">
         <th style="width:40%" class="border" ></th>
@@ -74,7 +74,7 @@
 </tbody>
 </table>
 </div>
-
+</div>
 </div>
 
 
@@ -82,8 +82,8 @@
 <div class="modal fade" id="exampleModal5" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog ">
     <div class="modal-content ">
-      <div class="modal-header ">
-        <h5 class="modal-title " id="exampleModalLabel"><span >Добавление единицы измерения</span></h5>
+      <div class="modal-header bg-primary text-light">
+        <h5 class="modal-title  " id="exampleModalLabel"><span >Добавление единицы измерения</span></h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
       </div>
       <div class="modal-body">
@@ -103,7 +103,7 @@
 <div class="modal fade" id="exampleModal6" tabindex="-1" aria-labelledby="exampleModalLabel6" aria-hidden="true">
   <div class="modal-dialog ">
     <div class="modal-content ">
-      <div class="modal-header ">
+      <div class="modal-header bg-primary text-light ">
         <h5 class="modal-title " id="exampleModalLabel6"><span >Добавление категории</span></h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
       </div>
